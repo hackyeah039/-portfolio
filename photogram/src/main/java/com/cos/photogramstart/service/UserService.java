@@ -1,5 +1,7 @@
 package com.cos.photogramstart.service;
 
+import java.util.function.Supplier;
+
 import javax.transaction.Transactional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +22,8 @@ public class UserService {
 	@Transactional
 	public User userUpdate(int id,User user) {
 		//1. 영속화
-		User userEntity = userRepository.findById(id).get();
+		User userEntity = userRepository.findById(id).orElseThrow(()->{return new IllegalArgumentException("찾을 수 없는 id입니다.");});
+				
 		//2. 영속화 된 오브젝트 수정 , 더티체킹(업데이트 완료)
 		userEntity.setName(user.getName());
 		userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

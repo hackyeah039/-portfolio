@@ -9,6 +9,9 @@ public class CustomValidaiotnException extends RuntimeException{
 	
 	private Map<String, String> errorMap;
 	
+	public CustomValidaiotnException (String message) {
+		super(message);
+	}
 	public CustomValidaiotnException (String message, Map<String, String> errorMap) {
 		super(message);
 		this.errorMap=errorMap;

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cos.photogramstart.domain.user.User;
@@ -45,5 +46,15 @@ public class AuthController {
 			authService.signUp(user);
 			return "auth/signin";			
 		}
+	}
+	
+	@GetMapping("/auth/signup")
+	public String signupPage() {
+		return "auth/signup";
+	}
+	
+	@GetMapping("/auth/signin")
+	public String signinPage() {
+		return "auth/signin";
 	}
 }

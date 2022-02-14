@@ -34,7 +34,6 @@ public class ImageController {
 	
 	@PostMapping("/image")
 	public String imageUpload(ImageUploadDto imageUploadDto,@AuthenticationPrincipal PrincipalDetails principalDetails) {
-		//서비스
 		imageService.imageUpload(imageUploadDto, principalDetails);
 		return "redirect:/user/"+principalDetails.getUser().getId();
 	}

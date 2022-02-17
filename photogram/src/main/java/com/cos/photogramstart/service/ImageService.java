@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class ImageService {
 	@Value("${file.path}")
 	private String uploadFolderAddress;
 	
+	@Transactional
 	public void imageUpload(ImageUploadDto dto,PrincipalDetails principalDetails) {
 		UUID uuid= UUID.randomUUID();
 		String imageFileName = uuid+"_"+dto.getFile().getOriginalFilename(); 
@@ -37,11 +40,12 @@ public class ImageService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+//		System.out.println(principalDetails.getUser()+" : 이게 유저 정보입니다. ");
 		//image 테이블에 저장
 		Image image =dto.toEntity(imageFileName,principalDetails.getUser());
-		Image imageEntity = imageReposiroty.save(image); 
+//		Image imageEntity = imageReposiroty.save(image); 
+		imageReposiroty.save(image); 
 		
-		System.out.println(imageEntity);
+//		System.out.println(imageEntity);
 	}
 }

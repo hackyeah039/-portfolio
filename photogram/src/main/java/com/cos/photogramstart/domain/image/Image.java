@@ -44,4 +44,14 @@ public class Image {
 	public void createDate() {
 		this.createDate=LocalDateTime.now();
 	}
+
+	//Sysout 시에 image클래스를 호출하면, getter를 다 호출하다가 36번째 줄 User도 호출하고, 그럼 User엔티티안의 List<image>도 호출해서 계속
+	//순환 된다. 그걸 방지하기 위해서 toString()을 만듦
+	// => 한마디로 오브젝트 콘솔에 출력시에 문제 방지하기 위해서 User를 제외하고 만듦 ==> Sysout(entity) == Sysout(entity.toString()) 이라서 
+//	@Override
+//	public String toString() {
+//		return "Image [id=" + id + ", caption=" + caption + ", postimageUrl=" + postimageUrl + ", createDate=" + createDate + "]";
+//	}
+	
+	
 }

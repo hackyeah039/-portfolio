@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.photogramstart.handler.ex.CustomApiException;
+import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidaiotnApiException;
 import com.cos.photogramstart.handler.ex.CustomValidaiotnException;
 import com.cos.photogramstart.util.Script;
@@ -21,7 +22,16 @@ public class ControllerExceptionHandler {
 	//런타임시 모든 exception을 낚아챔
 	@ExceptionHandler(CustomValidaiotnException.class)
 	public String validaiotnException(CustomValidaiotnException e) {
-		return Script.back(e.getErrorMap().toString()); //자바 스크립트 응답
+		if(e.getErrorMap()==null) {
+			return Script.back(e.getMessage());
+		}else {
+			return Script.back(e.getErrorMap().toString()); //자바 스크립트 응답			
+		}
+	} 
+	
+	@ExceptionHandler(CustomException.class)
+	public String exception(CustomException e) {
+		return Script.back(e.getMessage());
 	} 
 	
 	@ExceptionHandler(CustomValidaiotnApiException.class)

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cos.photogramstart.config.auth.PrincipalDetails;
+import com.cos.photogramstart.handler.ex.CustomValidaiotnException;
 import com.cos.photogramstart.service.ImageService;
 import com.cos.photogramstart.web.dto.image.ImageUploadDto;
 
@@ -34,6 +35,10 @@ public class ImageController {
 	
 	@PostMapping("/image")
 	public String imageUpload(ImageUploadDto imageUploadDto,@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		//multipart는 @blank 지원X @AuthController에서 @Valid형식같이 유효성 체크XX , 그래서 
+		if(imageUploadDto.getFile().isEmpty()) {
+			throw new CustomValidaiotnException("이미지 첨부 안되었습니다.");
+		}
 		imageService.imageUpload(imageUploadDto, principalDetails);
 		return "redirect:/user/"+principalDetails.getUser().getId();
 	}

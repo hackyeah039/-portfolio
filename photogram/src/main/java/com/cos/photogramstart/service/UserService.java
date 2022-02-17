@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cos.photogramstart.domain.subscribe.SubscribeRepository;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
 import com.cos.photogramstart.handler.ex.CustomException;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final SubscribeRepository subscribeRepository;
 	private final UserRepository userRepository;
 	
 	@Transactional(readOnly = true)
@@ -31,7 +33,13 @@ public class UserService {
 		
 		dto.setUser(userEntity); // 유저 정보 저장
 		dto.setPageOwnerState(pageUserid ==principalId); //페이지 주인이랑 지금 로그인 회원이랑 같은지 확인
-		dto.setImageCount(userEntity.getImages().size()); //view 전에 이미지 미리 계산 
+		dto.setImageCount(userEntity.getImages().size()); //view 전에 이미지 미리 계산
+		
+		int subscribeState=subscribeRepository.mSubscribeState(principalId, pageUserid);
+		int subscribeCount=subscribeRepository.mSubscribeCount(pageUserid);
+		
+		dto.setSubscribeState(subscribeState==1); //구독 상황 , 1과 같으면 참
+		dto.setSubscribeCount(subscribeCount); //구독자 수
 		return dto;
 	}
 	@Transactional

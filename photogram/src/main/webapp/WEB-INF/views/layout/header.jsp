@@ -2,6 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
+<!-- 세션정보 저장 -->
+<sec:authorize access="isAuthenticated()">
+	<sec:authentication property="principal" var="principal"/>
+</sec:authorize>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,6 +35,9 @@
 </head>
 
 <body>
+
+	<!-- principalId 담아두는 곳 -->
+	<input type="hidden" id="principalId" value="${principal.user.id}" />
 	
 	<header class="header">
 		<div class="container">
@@ -37,15 +46,21 @@
 			</a>
 			<nav class="navi">
 				<ul class="navi-list">
-					<li class="navi-item"><a href="/">
+					<li class="navi-item">
+						<a href="/">
 							<i class="fas fa-home"></i>
-						</a></li>
-					<li class="navi-item"><a href="/image/popular">
+						</a>
+					</li>
+					<li class="navi-item">
+						<a href="/image/popular">
 							<i class="far fa-compass"></i>
-						</a></li>
-					<li class="navi-item"><a href="/user/1">
+						</a>
+					</li>
+					<li class="navi-item">
+						<a href="/user/${principal.user.id}">
 							<i class="far fa-user"></i>
-						</a></li>
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

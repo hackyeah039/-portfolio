@@ -32,6 +32,7 @@ public class UserController {
 	
 	@GetMapping("/user/{pageUserId}")
 	public String profile(@PathVariable int pageUserId,Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+		System.out.println(pageUserId+"이거랑 , "+principalDetails.getUser().getId()+"이거");
 		UserProfileDto user=userService.회원프로필(pageUserId ,principalDetails.getUser().getId()); //해당 아이디가 있으면 진행, 없으면 Exception진행
 		model.addAttribute("dto",user);
 		return "user/profile";

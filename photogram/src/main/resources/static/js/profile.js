@@ -10,36 +10,79 @@
   (8) 구독자 정보 모달 닫기
  */
 
-// (1) 유저 프로파일 페이지 구독하기, 구독취소
-function toggleSubscribe(obj) {
+// (1) 유저 프로파일 페이지 구독하기, 구독취소 , jsp에서 this는 이벤트임
+function toggleSubscribe(toUserid, obj) {  
 	if ($(obj).text() === "구독취소") {
-		$(obj).text("구독하기");
-		$(obj).toggleClass("blue");
+	//구독 취소 시에
+		$.ajax({
+			type:"delete",
+			url: "/api/subscribe/" + toUserid,
+			dataType:"json"
+		}).done(res=>{
+			$(obj).text("구독하기");
+			$(obj).toggleClass("blue");
+		}).fail(error=>{
+			console.log("구독취소실패"+toUserid+"",error);
+		});
+		
 	} else {
-		$(obj).text("구독취소");
-		$(obj).toggleClass("blue");
+	//구독 하기 시에
+		$.ajax({
+			type:"post",
+			url:"/api/subscribe/" + toUserid,
+			dataType:"json"
+		}).done(res=>{
+			$(obj).text("구독취소");
+			$(obj).toggleClass("blue");
+		}).fail(error=>{
+			
+			console.log("구독하기실패"+toUserid+"",error);
+		});
 	}
 }
 
 // (2) 구독자 정보  모달 보기
-function subscribeInfoModalOpen() {
+function subscribeInfoModalOpen(pageUserid) {
+
 	$(".modal-subscribe").css("display", "flex");
+	
+	$.ajax({
+		url:`/api/user/${pageUserid}/subscribe`,
+		dataType:"json"
+	}).done(res=>{
+		console.log(res.data);
+		res.data.forEach((u)=>{
+			let item=getSubscribeModalItem(u);
+			$("#subscribeModalList").append(item);
+			console.log(u.subscribeState);
+		})
+	}).fail(error=>{
+		console.log("구독정보 불러오기 오류",error);
+	})
 }
 
-function getSubscribeModalItem() {
-
-}
-
-
-// (3) 구독자 정보 모달에서 구독하기, 구독취소
-function toggleSubscribeModal(obj) {
-	if ($(obj).text() === "구독취소") {
-		$(obj).text("구독하기");
-		$(obj).toggleClass("blue");
-	} else {
-		$(obj).text("구독취소");
-		$(obj).toggleClass("blue");
+function getSubscribeModalItem(u) {
+	let item=`<div class="subscribe__item" id="subscribeModalItem-${u.id}">
+	<div class="subscribe__img">
+		<img src="/upload/${u.profileImageUrl}" onerror="this.src='/images/person.jpeg'"/>
+	</div>
+	<div class="subscribe__text">
+		<h2>${u.username}</h2>
+	</div>
+	<div class="subscribe__btn">`;
+	if(!u.equalUserState){//동일유저 아닐 때 버튼이 만들어져야 함
+		if(u.subscribeState){//구독한 상태
+			item+=`<button class="cta blue" onclick="toggleSubscribe(${u.id},this)">구독취소</button>`;
+		}else{//구독안한 상태
+			item+=`<button class="cta blue" onclick="toggleSubscribe(${u.id},this)">구독하기</button>`;
+		}
 	}
+	item +=`	
+	</div>
+</div>`;
+
+
+	return item;
 }
 
 // (4) 유저 프로파일 사진 변경 (완)

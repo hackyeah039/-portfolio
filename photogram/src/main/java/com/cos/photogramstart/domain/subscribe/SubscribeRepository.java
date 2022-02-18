@@ -11,7 +11,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer>{
 	void mSubscribe(int fromUserid,int toUserid); 
 	
 	@Modifying   //데이터 베이스에 변경을 주는 네이티브 쿼리틑 modifying 필요
-	@Query(value = "DELETE FROM subscribe WHERE fromUserid=:fromUserid AND to Userid=:toUserid",nativeQuery = true)
+	@Query(value = "DELETE FROM subscribe WHERE fromUserid=:fromUserid AND toUserid=:toUserid",nativeQuery = true)
 	void mUnSubscribe(int fromUserid, int toUserid);
 	
 	//구독 상태 확인  

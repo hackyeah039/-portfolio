@@ -1,12 +1,18 @@
 package com.cos.photogramstart.service;
 
-import java.util.function.Supplier; 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+import java.util.function.Supplier;
 
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cos.photogramstart.config.auth.PrincipalDetails;
 import com.cos.photogramstart.domain.subscribe.SubscribeRepository;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
@@ -23,9 +29,35 @@ public class UserService {
 	private final SubscribeRepository subscribeRepository;
 	private final UserRepository userRepository;
 	
+	@Value("${file.path}")
+	private String uploadFolder;
+	
+	@Transactional
+	public User imageUpdate(MultipartFile profileImageFile,PrincipalDetails principalDetails) {
+		
+		UUID uuid = UUID.randomUUID();
+		String imageFileName = uuid + "_" + profileImageFile.getOriginalFilename();
+		
+		Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+		
+		try {
+			Files.write(imageFilePath, profileImageFile.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		User userEntity = userRepository.findById(principalDetails.getUser().getId()).get();
+		userEntity.setProfileImageUrl(imageFileName);
+		
+		return userEntity;
+	}
+	
+	
 	@Transactional(readOnly = true)
 	public UserProfileDto 회원프로필(int pageUserid, int principalId) {
-		UserProfileDto dto = new UserProfileDto(); 
+		
+		UserProfileDto dto = new UserProfileDto();
+		
 		//SELECT * from image WHERE userid =:userid;
 		User userEntity = userRepository.findById(pageUserid).orElseThrow(()->{ 
 			throw new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
@@ -54,7 +86,13 @@ public class UserService {
 		userEntity.setWebsite(user.getWebsite());
 		userEntity.setPhone(user.getPhone());
 		userEntity.setGender(user.getGender());
-	
+		
+		//비밀번호 수정시에 안넘기면 기존 비밀번호 유지
+		if(!user.getPassword().equals("")) {
+			userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		}
+		
+		
 		return userEntity;
 	}
 }

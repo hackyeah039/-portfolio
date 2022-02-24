@@ -1,14 +1,17 @@
 package com.cos.photogramstart.service;
 
-import java.nio.file.Files;
+import java.nio.file.Files ;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.photogramstart.config.auth.PrincipalDetails;
 import com.cos.photogramstart.domain.image.Image;
@@ -22,6 +25,15 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 
 	private final ImageReposiroty imageReposiroty;
+	
+	
+	@Transactional(readOnly = true)
+	public Page<Image> imageStory(int principalid,Pageable pageable){
+		Page<Image> images = imageReposiroty.mStory(principalid,pageable);
+		return images;
+	} 
+	
+	
 	
 	@Value("${file.path}")
 	private String uploadFolderAddress;

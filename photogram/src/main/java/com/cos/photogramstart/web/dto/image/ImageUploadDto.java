@@ -13,6 +13,7 @@ import lombok.Data;
 public class ImageUploadDto {
 	private MultipartFile file; //url의 원본 이미지
 	private String caption; //부가 설명
+	private String tags; //태그 
 	
 	//파라미터 1. 어떤 유저가(user) , 어떤 사진을(postImageUrl)
 	public Image toEntity(String postImageUrl,User user) {

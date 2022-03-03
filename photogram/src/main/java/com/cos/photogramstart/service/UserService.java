@@ -72,6 +72,12 @@ public class UserService {
 		
 		dto.setSubscribeState(subscribeState==1); //구독 상황 , 1과 같으면 참
 		dto.setSubscribeCount(subscribeCount); //구독자 수
+		
+		//프로필에 좋아요 카운트 추가
+		userEntity.getImages().forEach((image)->{
+			image.setLikeCount(image.getLikes().size());
+		});
+		
 		return dto;
 	}
 	@Transactional

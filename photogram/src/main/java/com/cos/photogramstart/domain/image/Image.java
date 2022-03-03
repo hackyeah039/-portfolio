@@ -1,6 +1,7 @@
 package com.cos.photogramstart.domain.image;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,9 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
-import com.cos.photogramstart.domain.subscribe.Subscribe;
+import com.cos.photogramstart.domain.like.Likes;
 import com.cos.photogramstart.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -39,9 +42,18 @@ public class Image {
 	private User user; //누가 업로드 한 건지.
 
 	//이미지 좋아요
+	@JsonIgnoreProperties({"image"})
+	@OneToMany(mappedBy = "image")
+	private List<Likes> likes;
 	//이미지 댓글
 	
 	private LocalDateTime createDate; //시간
+	
+	@Transient //데이터 테이블에서 사용하지 않는 칼럼 가리는 어노테이션
+	private boolean likeState; 
+	
+	@Transient
+	private int likeCount;
 	
 	@PrePersist
 	public void createDate() {

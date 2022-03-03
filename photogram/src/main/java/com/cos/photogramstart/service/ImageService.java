@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.photogramstart.config.auth.PrincipalDetails;
+import com.cos.photogramstart.domain.Tag.Tag;
+import com.cos.photogramstart.domain.Tag.TagRepository;
 import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.image.ImageReposiroty;
+import com.cos.photogramstart.util.TagUtils;
 import com.cos.photogramstart.web.dto.image.ImageUploadDto;
 
 import lombok.RequiredArgsConstructor;
@@ -25,11 +28,23 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 
 	private final ImageReposiroty imageReposiroty;
-	
+	private final TagRepository tagRepository;
 	
 	@Transactional(readOnly = true)
 	public Page<Image> imageStory(int principalid,Pageable pageable){
 		Page<Image> images = imageReposiroty.mStory(principalid,pageable);
+		
+		//image에 좋아요 담기
+		images.forEach((image)->{
+			
+			image.setLikeCount(image.getLikes().size());
+			
+			image.getLikes().forEach((like)->{
+				if(like.getUser().getId()==principalid) { //해당 이미지에 좋아요한 사람들을 찾아서 현재 로긴한 사람이 좋아요 한것인지 비교
+					image.setLikeState(true);
+				}
+			});
+		});
 		return images;
 	} 
 	
@@ -53,11 +68,19 @@ public class ImageService {
 			e.printStackTrace();
 		}
 //		System.out.println(principalDetails.getUser()+" : 이게 유저 정보입니다. ");
-		//image 테이블에 저장
+		// 1. image 저장
 		Image image =dto.toEntity(imageFileName,principalDetails.getUser());
 //		Image imageEntity = imageReposiroty.save(image); 
-		imageReposiroty.save(image); 
+		Image imageEntity =imageReposiroty.save(image); 
 		
-//		System.out.println(imageEntity);
+//		// 2. Tag 저장
+//		List<Tag> tags = TagUtils.parsingToTagObject(dto.getTags(), imageEntity);
+//		tagRepository.saveAll(tags);
+		
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Image> favImage(){
+		return imageReposiroty.mPopular();
 	}
 }

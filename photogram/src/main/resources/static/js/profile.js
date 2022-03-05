@@ -47,7 +47,7 @@ function subscribeInfoModalOpen(pageUserid) {
 	$(".modal-subscribe").css("display", "flex");
 	
 	$.ajax({
-		url:`/api/user/${pageUserid}/subscribe`,
+		url:"api/user/"+pageUserid+"/subscribe",
 		dataType:"json"
 	}).done(res=>{
 		console.log(res.data);
@@ -85,9 +85,15 @@ function getSubscribeModalItem(u) {
 	return item;
 }
 
-// (4) 유저 프로파일 사진 변경 (완)
-function profileImageUpload() {
-	let principalid =$("#principalid").val();
+// (4) 유저 프로파일 사진 변경 
+function profileImageUpload(pageUserid,principalid) {
+	//let principalid =$("#principalid").val();
+
+	if(pageUserid!==principalid){
+		alert("프로필 사진을 수정할 수 없는 유저입니다.");
+		return;
+	}
+	
 	
 	$("#userProfileImageInput").click();
 
@@ -99,18 +105,21 @@ function profileImageUpload() {
 			return;
 		}
 		
-		let profileImageForm = $("#userProfileImageForm")[0];
 		
-		let formData = new FormDate(profileImageForm); // Form태그 데이터 전송 타입을 multipart/form-data 로 만들어줌.
+		//서버에 이미지 전송
+		let profileImageForm = $("#userProfileImageForm")[0];
+	
+		// Form태그 데이터 전송 타입을 multipart/form-data 로 만들어줌.
+		let formData = new FormData(profileImageForm); 
 		
 		$.ajax({
 			type: "put",
-			url: "/user/" + principalid + "/profileImageUrl",
+			url: "/api/user/"+principalid+"/profileImageUrl",
 			data: formData,
-			contenType: false, //필수  x-www-form-urlencoded로 파싱됨.
-			processData: false, //필수 : contentType을 false로 줬을 때 쿼리 스트링으로 자동 설정됨. 그거 해제 하는 법
-			enctype: "multipart/form-data", //필수 아님
-			dataType:"json"
+			contentType: false, // 필수 : x-www-form-urlencoded로 파싱되는 것을 방지
+			processData: false,  // 필수: contentType을 false로 줬을 때 QueryString 자동 설정됨. 해제
+			enctype: "multipart/form-data",
+			dataType: "json"
 		}).done(res=>{
 			
 			// 사진 전송 성공시 이미지 변경
@@ -120,6 +129,8 @@ function profileImageUpload() {
 			}
 			reader.readAsDataURL(f); // 이 코드 실행시 reader.onload 실행됨.
 			
+		}).fail(error=>{
+			console.log("오류",error);
 		});
 		
 		

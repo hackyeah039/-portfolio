@@ -40,7 +40,7 @@ public class Comment {  // 1  N
 	private String content;
 	
 	@JoinColumn(name = "imageid")
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Image image; //1
 	
 	@JsonIgnoreProperties({"images"})

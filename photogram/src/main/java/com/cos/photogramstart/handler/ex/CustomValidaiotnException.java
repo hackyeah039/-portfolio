@@ -1,7 +1,7 @@
 package com.cos.photogramstart.handler.ex;
 
 import java.util.Map;
-
+// 제일처음 받을때 처리하는 익셉션
 public class CustomValidaiotnException extends RuntimeException{
 	
 	//객체 구분 시

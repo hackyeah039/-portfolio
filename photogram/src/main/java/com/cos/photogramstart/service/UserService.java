@@ -16,6 +16,7 @@ import com.cos.photogramstart.config.auth.PrincipalDetails;
 import com.cos.photogramstart.domain.subscribe.SubscribeRepository;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.web.dto.user.UserProfileDto;
 
@@ -33,24 +34,33 @@ public class UserService {
 	private String uploadFolder;
 	
 	@Transactional
-	public User imageUpdate(MultipartFile profileImageFile,PrincipalDetails principalDetails) {
+	public User imageUpdate(int principalid,MultipartFile profileImageFile) {
 		
 		UUID uuid = UUID.randomUUID();
 		String imageFileName = uuid + "_" + profileImageFile.getOriginalFilename();
 		
+		
 		Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 		
 		try {
+		
 			Files.write(imageFilePath, profileImageFile.getBytes());
 		} catch (Exception e) {
+		
 			e.printStackTrace();
 		}
 		
-		User userEntity = userRepository.findById(principalDetails.getUser().getId()).get();
+		
+		User userEntity = userRepository.findById(principalid).orElseThrow(()->{
+			throw new CustomApiException("유저를 찾을 수 없습니다.");
+		});	
+		
+//		System.out.println(userEntity + "이게 유저 " + userEntity.getId() + " _"+userEntity.getEmail() +"_"+userEntity.getProfileImageUrl());
 		userEntity.setProfileImageUrl(imageFileName);
+
 		
 		return userEntity;
-	}
+	}// 더티체킹으로 업데이트 됨
 	
 	
 	@Transactional(readOnly = true)
@@ -62,7 +72,6 @@ public class UserService {
 		User userEntity = userRepository.findById(pageUserid).orElseThrow(()->{ 
 			throw new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
 		});
-		
 		dto.setUser(userEntity); // 유저 정보 저장
 		dto.setPageOwnerState(pageUserid ==principalId); //페이지 주인이랑 지금 로그인 회원이랑 같은지 확인
 		dto.setImageCount(userEntity.getImages().size()); //view 전에 이미지 미리 계산
@@ -101,4 +110,5 @@ public class UserService {
 		
 		return userEntity;
 	}
+
 }

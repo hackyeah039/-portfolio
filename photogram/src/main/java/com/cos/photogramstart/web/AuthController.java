@@ -42,6 +42,7 @@ public class AuthController {
 			}
 			throw new CustomValidaiotnException("유효성 검사 실패함", errorMap);
 		}else {
+			//User <- SignupDto
 			User user = dto.toEntity();
 			authService.signUp(user);
 			return "auth/signin";			

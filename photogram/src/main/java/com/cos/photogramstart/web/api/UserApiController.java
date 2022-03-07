@@ -63,23 +63,12 @@ public class UserApiController {
 	public CMRespDto<?> update(
 			@PathVariable int userid,
 			@Valid UserUpdateDto dto,
-			BindingResult bindingResult,
+			BindingResult bindingResult, // @Valid 가 적혀있는 다음 파라메터 적어야됨
 			@AuthenticationPrincipal PrincipalDetails principalDetails) {
-		
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errorMap = new HashMap<>();
-			
-			for(FieldError error:bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-				System.out.println("이거임"+error.getDefaultMessage());
-			}
-			throw new CustomValidaiotnApiException("유효성 검사 실패함", errorMap);
-		}else {
+
 			User user=userService.userUpdate(userid,dto.toEntity());
 			principalDetails.setUser(user);
 			return new CMRespDto<>(1,"회원 수정 완료",user);
-			
-		}
 		
 	}
 

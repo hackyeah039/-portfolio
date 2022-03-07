@@ -29,24 +29,18 @@ public class AuthController {
 
 	@Autowired
 	private final AuthService authService; //final 쓰는 이유는 객체,생성자 생성시 무조건 초기화
-
+	// 회원가입버튼 -> /auth/signup -> /auth/signin
+	// 회원가입버튼 X
 	@PostMapping("/auth/signup")
 	public String signup(@Valid SignupDto dto,BindingResult bindingResult) {
-		
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errorMap = new HashMap<>();
 			
-			for(FieldError error:bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-				System.out.println("이거임"+error.getDefaultMessage());
-			}
-			throw new CustomValidaiotnException("유효성 검사 실패함", errorMap);
-		}else {
-			//User <- SignupDto
-			User user = dto.toEntity();
-			authService.signUp(user);
-			return "auth/signin";			
-		}
+		//User <- SignupDto
+		User user = dto.toEntity();
+		authService.signUp(user);
+		
+		// 로그 남기는 후처리
+		return "auth/signin";			
+		
 	}
 	
 	@GetMapping("/auth/signup")

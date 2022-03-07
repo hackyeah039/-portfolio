@@ -24,7 +24,7 @@ public class CommentService {
 		Image image =new Image();
 		image.setId(imageid);
 		User userEntity = userRepository.findById(userid).orElseThrow(()->{
-			throw new CustomApiException("유저 아이디를 찾을수 없습니다.");
+			return new CustomApiException("유저 아이디를 찾을수 없습니다.");
 		});
 		
 		Comment comment = new Comment();
@@ -44,12 +44,3 @@ public class CommentService {
 		}
 	}
 }
-//	Image image = Image.builder()
-//			.id(imageId)
-//			.build();
-//	
-//	Comment comment = Comment.builder()
-//			.content(content)
-//			.image(image)
-//			.user(user)
-//			.build();

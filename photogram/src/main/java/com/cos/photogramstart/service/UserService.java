@@ -70,7 +70,7 @@ public class UserService {
 		
 		//SELECT * from image WHERE userid =:userid;
 		User userEntity = userRepository.findById(pageUserid).orElseThrow(()->{ 
-			throw new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
+			return new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
 		});
 		dto.setUser(userEntity); // 유저 정보 저장
 		dto.setPageOwnerState(pageUserid ==principalId); //페이지 주인이랑 지금 로그인 회원이랑 같은지 확인

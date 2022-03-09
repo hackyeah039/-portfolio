@@ -5,7 +5,9 @@ server:
     encoding:
       charset: utf-8
       enabled: true
-    
+      
+userInfoUri: https://graph.facebook.com/me?fields=email,public_profile
+     
 spring:
   mvc:
     view:
@@ -30,11 +32,16 @@ spring:
     multipart:
       enabled: true
       max-file-size: 2MB
-
+#spring.security.oauth2.client.provider.facebook.user-info-uri=https://graph.facebook.com/me?fields=id,name,email,picture
   security:
     user:
       name: test
-      password: 1234   
+      password: 1234       oauth2:      client:        registration:
+          facebook:
+            client-id: 1082707285627608
+            client-secret: cea27732de7d977296f4bc9275c31700
+            scope:            - email
+            - public_profile          
 
 file:
   path: C:\Users\jwjs3\Documents\workspace-spring-tool-suite-4-4.11.0.RELEASE\workspace\springbootwork\upload\

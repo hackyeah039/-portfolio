@@ -1,6 +1,6 @@
 package com.cos.photogramstart.config.oauth;
 
-import java.util.Map;
+import java.util.Map; 
 import java.util.UUID;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -50,11 +50,35 @@ public class OAuth2DetailsService extends DefaultOAuth2UserService{
 //				String email = (String) userInfo.get("email");
 //				String name = (String) userInfo.get("name");
 				
-				User userEntity = userRepository.findByUsername(username);
 				
-
-				if(userEntity == null) { // OAuth2.0 최초 로그인
+				System.out.println(username);
+				
+				if(provider == null) { //평범 아이디 로그인
 					
+					User userEntity = userRepository.findByUsername(username);
+					
+					if(userEntity == null) { // 최초 로그인
+						
+						User user = User.builder()
+								.username(providerID)
+								.password(password)
+								.provider(provider)
+								.email(email)
+								.name(name)
+								.role(role)
+								.build();
+						System.out.println("최초 로그인 끝");
+						return new PrincipalDetails(userRepository.save(user), oauth2User.getAttributes()); //세션 return
+					}else { // 이미 아이디가 있음
+						System.out.println("이미 아이디가 있음");
+						return new PrincipalDetails(userEntity, oauth2User.getAttributes());
+					} // 평범 로그인 끝
+				}else { //OAuth2.0 로그인
+					
+					User userEntity = userRepository.findByEmail(email);
+					
+					if(userEntity == null) { // 최초 로그인
+										
 					User user = User.builder()
 							.username(providerID)
 							.password(password)
@@ -63,11 +87,18 @@ public class OAuth2DetailsService extends DefaultOAuth2UserService{
 							.name(name)
 							.role(role)
 							.build();
-					System.out.println("최초 로그인 끝");
-					return new PrincipalDetails(userRepository.save(user), oauth2User.getAttributes()); //세션 return
-				}else { // OAuth2.0 이미 아이디가 있음
-					System.out.println("이미 아이디가 있음");
-					return new PrincipalDetails(userEntity, oauth2User.getAttributes());
-				}
-	}
+					
+						System.out.println("최초 로그인 끝");
+						
+						return new PrincipalDetails(userRepository.save(user), oauth2User.getAttributes()); //세션 return
+						
+					}else { //OAuth2.0 이미 아이디가 있음
+						
+						System.out.println("이미 아이디가 있음");
+						
+						return new PrincipalDetails(userEntity, oauth2User.getAttributes());
+					}
+				} //OAuth2.0 로그인 끝
+				
+	} //loadUser()
 }

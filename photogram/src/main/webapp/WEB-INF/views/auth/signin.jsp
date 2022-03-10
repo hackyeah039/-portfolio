@@ -40,8 +40,10 @@
                         <!-- 또는end -->
                         
                         <!-- Oauth 소셜로그인 -->
-                        <div class="login__facebook">
+                        <div class="login__naver">
                             <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+                        </div>
+                        <div class="login__google">
                             <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
                         </div>
                         <!-- Oauth 소셜로그인end -->

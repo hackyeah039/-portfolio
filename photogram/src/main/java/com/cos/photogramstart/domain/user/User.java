@@ -42,7 +42,7 @@ public class User {
 	private String phone;
 	private String gender;
 	private String provider;
-//	private String website;
+	private String website;
 	private String profileImageUrl; //사진
 	private String role; //권한
 	
@@ -58,7 +58,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", bio="
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", website="+ website + ", bio="
 				+ bio + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", provider=" + provider
 				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role + ", createDate="
 				+ createDate + "]";

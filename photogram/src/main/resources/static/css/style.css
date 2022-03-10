@@ -131,20 +131,30 @@ button {
   padding: 0 40px;
   margin-top: 15px;
 }
-/*페이스북 로그인 버튼*/
-.login__facebook button {
-  background-color: #fff;
+/*네이버 로그인 버튼*/
+.login__naver a {
+  background-color: rgb(255, 255, 128);
   width: 100%;
   height: 30px;
-  border: 0;
+  border: 2;
+  font-weight: 600;
+  font-size: 15px;
+}
+/*구글 로그인 버튼*/
+.login__google a {
+  background-color: #74992e;
+  width: 100%;
+  height: 30px;
+  border: 2;
   font-weight: 600;
   font-size: 15px;
 }
 /*페이스북 로그인 색깔*/
-.login__facebook button i,
-span {
+.login__naver a {
   color: #385185;
 }
+
+
 
 /*가입페이지로 이동*/
 .login__register {

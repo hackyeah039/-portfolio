@@ -29,19 +29,20 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private int id;
 	
-	@Column(length = 40,unique = true)
+	@Column(length = 60,unique = true)
 	private String username;
 	@Column(nullable = false)
 	private String password;	
 	@Column(nullable = false)
 	private String name;
-	private String website; //웹사이트
+
 	private String bio; //자기소개
 	@Column(nullable = false)
 	private String email;
 	private String phone;
 	private String gender;
-	
+	private String provider;
+//	private String website;
 	private String profileImageUrl; //사진
 	private String role; //권한
 	
@@ -54,12 +55,22 @@ public class User {
 	public void createDate() {
 		this.createDate=LocalDateTime.now();
 	}
-	
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", website="
-				+ website + ", bio=" + bio + ", email=" + email + ", phone=" + phone + ", gender=" + gender
-				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role +", createDate="
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", bio="
+				+ bio + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", provider=" + provider
+				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role + ", createDate="
 				+ createDate + "]";
 	}
+	
+//	@Override
+//	public String toString() {
+//		return "User [id=" + id + ", username=" + username + ", password=" + password + ", name=" + name + ", website="
+//				+ website + ", bio=" + bio + ", email=" + email + ", phone=" + phone + ", gender=" + gender
+//				+ ", profileImageUrl=" + profileImageUrl + ", role=" + role +", createDate="
+//				+ createDate + "]";
+//	}
+	
+	
 }

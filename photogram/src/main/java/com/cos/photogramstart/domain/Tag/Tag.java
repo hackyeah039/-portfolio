@@ -19,29 +19,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Entity
-public class Tag {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private int id;
-	private String name;
-	
-	@ManyToOne
-	@JoinColumn(name = "imageid")
-	private Image image;
-	
-	private LocalDateTime createDate; //시간
-	
-	@PrePersist
-	public void createDate() {
-		this.createDate=LocalDateTime.now();
-	}
+//@Builder
+////@AllArgsConstructor
+////@NoArgsConstructor
+//@Data
+//@Entity
+//public class Tag {
+//	
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+//	private int id;
+//	private String name;
+//	
+//	@ManyToOne
+//	@JoinColumn(name = "imageid")
+//	private Image image;
+//	
+//	private LocalDateTime createDate; //시간
+//	
+//	@PrePersist
+//	public void createDate() {
+//		this.createDate=LocalDateTime.now();
+//	}
 
 	
-
-}
+//
+//}

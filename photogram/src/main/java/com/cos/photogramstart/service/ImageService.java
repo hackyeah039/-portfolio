@@ -1,6 +1,6 @@
 package com.cos.photogramstart.service;
 
-import java.nio.file.Files ;
+import java.nio.file.Files ; 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.photogramstart.config.auth.PrincipalDetails;
-import com.cos.photogramstart.domain.Tag.Tag;
-import com.cos.photogramstart.domain.Tag.TagRepository;
+//import com.cos.photogramstart.domain.Tag.Tag;
+//import com.cos.photogramstart.domain.Tag.TagRepository;
 import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.image.ImageReposiroty;
-import com.cos.photogramstart.util.TagUtils;
+//import com.cos.photogramstart.util.TagUtils;
 import com.cos.photogramstart.web.dto.image.ImageUploadDto;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 
 	private final ImageReposiroty imageReposiroty;
-	private final TagRepository tagRepository;
+//	private final TagRepository tagRepository;
 	
 	@Transactional(readOnly = true)
 	public Page<Image> imageStory(int principalid,Pageable pageable){

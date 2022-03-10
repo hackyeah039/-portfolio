@@ -41,10 +41,8 @@
                         
                         <!-- Oauth 소셜로그인 -->
                         <div class="login__facebook">
-                            <button onclick="javascript:location.href='/oauth2/authorization/facebook'">
-                                <i class="fab fa-facebook-square"></i>
-                                <span>Facebook으로 로그인</span>
-                            </button>
+                            <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+                            <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
                         </div>
                         <!-- Oauth 소셜로그인end -->
                     </div>
@@ -61,5 +59,4 @@
         
     </div>
 </body>
-
 </html>
